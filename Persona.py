@@ -21,8 +21,8 @@ class Persona:
         print(f'Hola, mi nombre es {self.__nombre} {self.__apellido} y nací el {self.__fecha_nacimiento}')
 
 
-persona = Persona("Alan", "Cofre", "29 de junio de 2001" )
-persona.Presentarse()
+#persona = Persona("Alan", "Cofre", "29 de junio de 2001" )
+#persona.Presentarse()
 
 
 
