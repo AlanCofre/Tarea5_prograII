@@ -4,6 +4,8 @@ class Persona:
         Constructor de la clase Persona.
         Inicializa los atributos privados de la clase: nombre, apellido y fecha de nacimiento.
         """
+        if not nombre or not apellido or not fecha_nacimiento:
+            raise ValueError("El nombre, apellido y fecha de nacimiento no pueden estar vacíos.")
         self.__nombre = nombre
         self.__apellido = apellido
         self.__fecha_nacimiento = fecha_nacimiento
@@ -26,6 +28,8 @@ class Persona:
         Parámetros:
         value (str): El nuevo nombre que se va a asignar.
         """
+        if not value:
+            raise ValueError("El nombre no puede estar vacío.")
         self.__nombre = value
 
     # Propiedad para obtener el apellido
@@ -46,6 +50,8 @@ class Persona:
         Parámetros:
         value (str): El nuevo apellido que se va a asignar.
         """
+        if not value:
+            raise ValueError("El apellido no puede estar vacío.")
         self.__apellido = value
 
     # Propiedad para obtener la fecha de nacimiento
@@ -66,6 +72,8 @@ class Persona:
         Parámetros:
         value (str): La nueva fecha de nacimiento que se va a asignar.
         """
+        if not value:
+            raise ValueError("La fecha de nacimiento no puede estar vacía.")
         self.__fecha_nacimiento = value
 
     def Presentarse(self):  

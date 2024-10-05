@@ -7,9 +7,13 @@ class Profesor(Persona):
         Inicializa los atributos heredados de la clase Persona (nombre, apellido y fecha de nacimiento)
         y agrega los atributos específicos del profesor: número de empleado y departamento.
         """
+        if not numero_empleado:
+            raise ValueError("El número de empleado no puede estar vacío.")
+        if not departamento:
+            raise ValueError("El departamento no puede estar vacío.")
+        
         # Llamamos al constructor de la clase base (Persona) para inicializar los atributos heredados
         super().__init__(nombre, apellido, fecha_nacimiento)
-        # Inicializamos los atributos propios de la clase Profesor
         self.__numero_empleado = numero_empleado 
         self.__departamento = departamento
     
@@ -27,6 +31,8 @@ class Profesor(Persona):
         """
         Setter para cambiar el valor del número de empleado.
         """
+        if not value:
+            raise ValueError("El número de empleado no puede estar vacío.")
         self.__numero_empleado = value
     
     # Propiedad para obtener el departamento
@@ -43,6 +49,8 @@ class Profesor(Persona):
         """
         Setter para cambiar el valor del departamento.
         """
+        if not value:
+            raise ValueError("El departamento no puede estar vacío.")
         self.__departamento = value  # Corrección de error tipográfico
 
     # Método público para enseñar una materia
@@ -50,6 +58,9 @@ class Profesor(Persona):
         """
         Método público que simula que el profesor está enseñando una materia.
         """
+        if not materia:
+            raise ValueError("La materia no puede estar vacía.")
+        
         print(f'El profesor está enseñando {materia}')
 
     # Sobrescribir el método Presentarse para incluir detalles del profesor

@@ -7,9 +7,14 @@ class Estudiante(Persona):
         Inicializa los atributos heredados de la clase Persona (nombre, apellido y fecha de nacimiento)
         y agrega los atributos específicos del estudiante: matrícula, carrera y semestre.
         """
+        if not matricula:
+            raise ValueError("La matrícula no puede estar vacía.")
+        if not carrera:
+            raise ValueError("La carrera no puede estar vacía.")
+        if semestre <= 0:
+            raise ValueError("El semestre debe ser un número positivo.")
         # Llamamos al constructor de la clase base (Persona) para inicializar los atributos heredados
         super().__init__(nombre, apellido, fecha_nacimiento)
-        # Inicializamos los atributos propios de la clase Estudiante
         self.__matricula = matricula
         self.__carrera = carrera
         self.__semestre = semestre
@@ -28,6 +33,8 @@ class Estudiante(Persona):
         """
         Setter para cambiar el valor de la matrícula.
         """
+        if not value:
+            raise ValueError("La matrícula no puede estar vacía.")
         self.__matricula = value
 
     # Propiedad para obtener la carrera
@@ -44,6 +51,8 @@ class Estudiante(Persona):
         """
         Setter para cambiar el valor de la carrera.
         """
+        if not value:
+            raise ValueError("La carrera no puede estar vacía.")
         self.__carrera = value
 
     # Propiedad para obtener el semestre
@@ -60,6 +69,8 @@ class Estudiante(Persona):
         """
         Setter para cambiar el valor del semestre.
         """
+        if value <= 0:
+            raise ValueError("El semestre debe ser un número positivo.")
         self.__semestre = value
 
     # Método para que el estudiante estudie una materia
@@ -68,6 +79,10 @@ class Estudiante(Persona):
         Método público que simula que el estudiante está estudiando una materia durante
         un cierto número de horas.
         """
+        if not materia:
+            raise ValueError("La materia no puede estar vacía.")
+        if horas <= 0:
+            raise ValueError("Las horas deben ser un número positivo.")
         print(f"El estudiante ha estudiado {materia} por {horas} horas")
     
     # Sobreescribir el método Presentarse para incluir detalles del estudiante
