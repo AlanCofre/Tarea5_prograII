@@ -82,3 +82,4 @@ class Persona:
         Imprime un mensaje con el nombre completo y la fecha de nacimiento de la persona.
         """
         print(f'Hola, mi nombre es {self.__nombre} {self.__apellido} y nací el {self.__fecha_nacimiento}')
+  

@@ -100,3 +100,6 @@ class Estudiante(Persona):
 # Crear una instancia de la clase Estudiante y llamamos al método Presentarse
 estudiante = Estudiante("Ana", "Gómez", "15/05/2000", "A12345", "Ingeniería de Software", 5)
 estudiante.Presentarse()
+
+
+para hacer push hay dos opciones
