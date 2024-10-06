@@ -17,7 +17,7 @@ class App(ctk.CTk):
         self.profesores = []
         self.estudiantes = []
         self.grupos = []
-        self.programa_academico = ProgramaAcademico("Ingeniería de Software", "ISW001")
+        self.programa_academico = ProgramaAcademico("Sistemas en informática", "ISW001")
 
         # Crear el marco de control principal
         self.frame_principal = ctk.CTkFrame(self)
@@ -185,38 +185,69 @@ class App(ctk.CTk):
         label_numero.pack(pady=5)
         entry_numero = ctk.CTkEntry(ventana_grupo)
         entry_numero.pack(pady=5)
+        
+        label_asignatura = ctk.CTkLabel(ventana_grupo, text="Seleccione Asignatura:")
+        label_asignatura.pack(pady=5)
+        entry_asignatura = ctk.CTkOptionMenu(ventana_grupo, values=[a.nombre for a in self.asignaturas])
+        entry_asignatura.pack(pady=5)
+
+        # Selección de Profesor
+        label_profesor = ctk.CTkLabel(ventana_grupo, text="Seleccione Profesor:")
+        label_profesor.pack(pady=5)
+        entry_profesor = ctk.CTkOptionMenu(ventana_grupo, values=[f"{p.nombre} {p.apellido}" for p in self.profesores])
+        entry_profesor.pack(pady=5)
 
         def guardar_grupo():
             numero_grupo = int(entry_numero.get())
+        
+            # Obtener la asignatura seleccionada
+            nombre_asignatura = entry_asignatura.get()
+            asignatura_seleccionada = None
             
-            # Selección de Asignatura
-            label_asignatura = ctk.CTkLabel(ventana_grupo, text="Seleccione Asignatura:")
-            label_asignatura.pack(pady=5)
-            entry_asignatura = ctk.CTkOptionMenu(ventana_grupo, values=[a.nombre for a in self.asignaturas])
-            entry_asignatura.pack(pady=5)
+            for asignatura in self.asignaturas:
+                if asignatura.nombre == nombre_asignatura:
+                    asignatura_seleccionada = asignatura
+                    break
             
-            asignatura_seleccionada = self.asignaturas[entry_asignatura.get()]
-            
-            # Selección de Profesor
-            label_profesor = ctk.CTkLabel(ventana_grupo, text="Seleccione Profesor:")
-            label_profesor.pack(pady=5)
-            entry_profesor = ctk.CTkOptionMenu(ventana_grupo, values=[f"{p.nombre} {p.apellido}" for p in self.profesores])
-            entry_profesor.pack(pady=5)
+            if asignatura_seleccionada is None:
+                self.text_output.insert("end", "La asignatura seleccionada no existe.\n")
+                return
 
-            profesor_seleccionado = self.profesores[entry_profesor.get()]
+            # Obtener el profesor seleccionado
+            nombre_profesor = entry_profesor.get()
+            profesor_seleccionado = None
             
+            for profesor in self.profesores:
+                if f"{profesor.nombre} {profesor.apellido}" == nombre_profesor:
+                    profesor_seleccionado = profesor
+                    break
+            
+            if profesor_seleccionado is None:
+                self.text_output.insert("end", "El profesor seleccionado no existe.\n")
+                return
+        
             grupo = Grupo(numero_grupo, asignatura_seleccionada, profesor_seleccionado)
             self.grupos.append(grupo)
             self.text_output.insert("end", f"Grupo {numero_grupo} creado con éxito.\n")
             ventana_grupo.destroy()
+            
 
         boton_guardar = ctk.CTkButton(ventana_grupo, text="Guardar Grupo", command=guardar_grupo)
         boton_guardar.pack(pady=10)
 
     def mostrar_programa(self):
-        self.text_output.insert("end", f"\nPrograma Académico: {self.programa_academico.nombre}\n")
-        for grupo in self.programa_academico.grupos:
-            self.text_output.insert("end", f"Grupo: {grupo.numero_grupo}, Asignatura: {grupo.asignatura.nombre}\n")
+        if not self.grupos:
+            self.text_output.insert("end", "No se ha agregado ningún grupo al programa académico.\nPrimero debe agregar grupos.\n")
+            return
+        
+        
+        self.text_output.insert("end", f"Programa Académico: {self.programa_academico.nombre} ({self.programa_academico.codigo})\n")
+        
+    
+        for grupo in self.grupos:
+            asignatura = grupo.asignatura.nombre
+            profesor = f"{grupo.profesor.nombre} {grupo.profesor.apellido}"
+            self.text_output.insert("end", f"Grupo {grupo.numero_grupo}: Asignatura: {asignatura}, Profesor: {profesor}\n")
 
 if __name__ == "__main__":
     ctk.set_appearance_mode("dark")  # Modo oscuro de CustomTkinter

@@ -56,5 +56,4 @@ class Asignatura:
 
 
 # Creación de una instancia de prueba
-hola = Asignatura("Matemática", "KKT898", 12)
-hola.mostrar_informacion()
+

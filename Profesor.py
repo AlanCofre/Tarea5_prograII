@@ -75,5 +75,4 @@ class Profesor(Persona):
         print(f'Soy profesor del departamento de {self.__departamento}')
 
 # Crear una instancia de la clase Profesor y llamamos al método Presentarse
-profesor = Profesor("Victor", "Gonzalez", "05/03/2005", "936593", "Medicina")
-profesor.Presentarse()
+

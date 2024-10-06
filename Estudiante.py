@@ -98,8 +98,7 @@ class Estudiante(Persona):
         print(f"Además, soy estudiante de {self.__carrera}, en el semestre {self.__semestre}, y mi matrícula es {self.__matricula}.")
 
 # Crear una instancia de la clase Estudiante y llamamos al método Presentarse
-estudiante = Estudiante("Ana", "Gómez", "15/05/2000", "A12345", "Ingeniería de Software", 5)
-estudiante.Presentarse()
 
 
-para hacer push hay dos opciones
+
+

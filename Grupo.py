@@ -68,17 +68,4 @@ class Grupo:
             print(f"- {estudiante.nombre}, Matrícula: {estudiante.matricula}")
 
 # Crear instancias de Asignatura, Profesor y Grupo para probar
-asignatura = Asignatura("Matemática", "MATH101", 5)
-profesor = Profesor("Alonso", "Roberto", "12/12/1980", "PR001", "Matemáticas")
 
-# Crear un grupo y agregar estudiantes
-grupo = Grupo(101, asignatura, profesor)
-estudiante1 = Estudiante("Juan", "Perez", "01/01/2000", "A001", "Ingeniería", 1)
-estudiante2 = Estudiante("María", "Gomez", "02/02/2000", "A002", "Ingeniería", 1)
-
-# Agregar estudiantes al grupo
-grupo.agregar_estudiante(estudiante1)
-grupo.agregar_estudiante(estudiante2)
-
-# Mostrar la información del grupo
-grupo.mostrar_grupo()
