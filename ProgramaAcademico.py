@@ -14,6 +14,8 @@ class ProgramaAcademico:
 
     @nombre.setter
     def nombre(self, nombre):
+        if not nombre:
+            raise ValueError("El nombre del programa académico no puede estar vacío.")
         self._nombre = nombre
 
     # Propiedad para obtener y modificar el código del programa
@@ -23,6 +25,8 @@ class ProgramaAcademico:
 
     @codigo.setter
     def codigo(self, codigo):
+        if not codigo:
+            raise ValueError("El código del programa académico no puede estar vacío.")
         self._codigo = codigo
 
     # Propiedad para obtener la lista de grupos (solo lectura)
@@ -57,5 +61,8 @@ class ProgramaAcademico:
         print(f"\nPrograma Académico: {self._nombre}")
         print(f"Código: {self._codigo}")
         print("Grupos:")
+        if not self._grupos:
+            print("No hay grupos en este programa académico.")
         for grupo in self._grupos:
             grupo.mostrar_grupo()
+

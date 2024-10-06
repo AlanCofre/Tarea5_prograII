@@ -1,12 +1,15 @@
-import Asignatura
+from Asignatura import Asignatura  # Asegurarse de importar la clase Asignatura correctamente
+from Profesor import Profesor      # Asegurarse de importar la clase Profesor correctamente
+from Estudiante import Estudiante  # Asegurarse de importar la clase Estudiante correctamente
+
 class Grupo:
     contador_grupos = 0  # Atributo de clase para contar grupos
 
-    def __init__(self, numero_grupo, asignatura, profesor):
-        self.__numero_grupo = numero_grupo  # Atributo privado
-        self.__asignatura = Asignatura.nombre  # Atributo privado (objeto Asignatura)
-        self.__profesor = Profesor.nombre  # Atributo privado (objeto Profesor)
-        self._estudiantes = [Estudiante.nombre]  # Lista protegida de estudiantes
+    def __init__(self, numero_grupo: int, asignatura: Asignatura, profesor: Profesor):
+        self._numero_grupo = numero_grupo  # Atributo privado
+        self._asignatura = asignatura  # Atributo privado (objeto Asignatura)
+        self._profesor = profesor  # Atributo privado (objeto Profesor)
+        self._estudiantes = []  # Lista protegida de estudiantes
         Grupo.contador_grupos += 1  # Incrementar contador de grupos
 
     # Propiedad para obtener y modificar el número del grupo
@@ -18,23 +21,15 @@ class Grupo:
     def numero_grupo(self, numero_grupo):
         self._numero_grupo = numero_grupo
 
-    # Propiedad para obtener y modificar la asignatura
+    # Propiedad para obtener la asignatura
     @property
     def asignatura(self):
         return self._asignatura
 
-    @asignatura.setter
-    def asignatura(self, asignatura):
-        self._asignatura = asignatura
-
-    # Propiedad para obtener y modificar el profesor
+    # Propiedad para obtener el profesor
     @property
     def profesor(self):
         return self._profesor
-
-    @profesor.setter
-    def profesor(self, profesor):
-        self._profesor = profesor
 
     # Propiedad para obtener la lista de estudiantes
     @property
@@ -47,17 +42,17 @@ class Grupo:
         return cls.contador_grupos
 
     # Método para agregar un estudiante
-    def agregar_estudiante(self, estudiante):
+    def agregar_estudiante(self, estudiante: Estudiante):
         if estudiante not in self._estudiantes:
             self._estudiantes.append(estudiante)
-            print(f"Estudiante {estudiante['nombre']} agregado al grupo {self._numero_grupo}.")
+            print(f"Estudiante {estudiante.nombre} agregado al grupo {self._numero_grupo}.")
         else:
-            print(f"El estudiante {estudiante['nombre']} ya está en el grupo {self._numero_grupo}.")
+            print(f"El estudiante {estudiante.nombre} ya está en el grupo {self._numero_grupo}.")
 
     # Método para eliminar un estudiante por matrícula
-    def eliminar_estudiante(self, matricula):
+    def eliminar_estudiante(self, matricula: str):
         for estudiante in self._estudiantes:
-            if estudiante["matricula"] == matricula:
+            if estudiante.matricula == matricula:
                 self._estudiantes.remove(estudiante)
                 print(f"Estudiante con matrícula {matricula} eliminado del grupo {self._numero_grupo}.")
                 return
@@ -67,11 +62,23 @@ class Grupo:
     def mostrar_grupo(self):
         print(f"\nGrupo: {self._numero_grupo}")
         print(f"Asignatura: {self._asignatura.nombre}")
-        print(f"Profesor: {self._profesor}")
+        print(f"Profesor: {self._profesor.nombre} {self._profesor.apellido}")
         print(f"Estudiantes en el grupo ({len(self._estudiantes)} estudiantes):")
         for estudiante in self._estudiantes:
-            print(f"- {estudiante['nombre']}, Matrícula: {estudiante['matricula']}")
+            print(f"- {estudiante.nombre}, Matrícula: {estudiante.matricula}")
 
-hola = Grupo(12, "matematica", "alonso roberto")
+# Crear instancias de Asignatura, Profesor y Grupo para probar
+asignatura = Asignatura("Matemática", "MATH101", 5)
+profesor = Profesor("Alonso", "Roberto", "12/12/1980", "PR001", "Matemáticas")
 
+# Crear un grupo y agregar estudiantes
+grupo = Grupo(101, asignatura, profesor)
+estudiante1 = Estudiante("Juan", "Perez", "01/01/2000", "A001", "Ingeniería", 1)
+estudiante2 = Estudiante("María", "Gomez", "02/02/2000", "A002", "Ingeniería", 1)
+
+# Agregar estudiantes al grupo
+grupo.agregar_estudiante(estudiante1)
+grupo.agregar_estudiante(estudiante2)
+
+# Mostrar la información del grupo
 grupo.mostrar_grupo()

@@ -1,8 +1,17 @@
 # Asignatura.py
+# Asignatura.py
 class Asignatura:
     contador_asignaturas = 0  # Atributo de clase para contar asignaturas
 
     def __init__(self, nombre, codigo, creditos):
+        # Validaciones básicas
+        if not nombre:
+            raise ValueError("El nombre de la asignatura no puede estar vacío.")
+        if not codigo:
+            raise ValueError("El código de la asignatura no puede estar vacío.")
+        if creditos <= 0:
+            raise ValueError("Los créditos deben ser un número positivo.")
+        
         self._nombre = nombre
         self._codigo = codigo
         self._creditos = creditos
@@ -14,6 +23,8 @@ class Asignatura:
 
     @nombre.setter
     def nombre(self, nombre):
+        if not nombre:
+            raise ValueError("El nombre de la asignatura no puede estar vacío.")
         self._nombre = nombre
 
     @property
@@ -22,6 +33,8 @@ class Asignatura:
 
     @codigo.setter
     def codigo(self, codigo):
+        if not codigo:
+            raise ValueError("El código de la asignatura no puede estar vacío.")
         self._codigo = codigo
 
     @property
@@ -30,6 +43,8 @@ class Asignatura:
 
     @creditos.setter
     def creditos(self, creditos):
+        if creditos <= 0:
+            raise ValueError("Los créditos deben ser un número positivo.")
         self._creditos = creditos
 
     @classmethod
@@ -40,6 +55,6 @@ class Asignatura:
         print(f"Asignatura: {self._nombre}, Código: {self._codigo}, Créditos: {self._creditos}")
 
 
-hola = Asignatura("matematica", "kkt898", 12)
-
+# Creación de una instancia de prueba
+hola = Asignatura("Matemática", "KKT898", 12)
 hola.mostrar_informacion()

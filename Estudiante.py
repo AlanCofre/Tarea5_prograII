@@ -1,4 +1,3 @@
-holaaaaaaaa
 
 from Persona import Persona
 
