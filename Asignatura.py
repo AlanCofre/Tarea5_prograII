@@ -1,5 +1,3 @@
-# Asignatura.py
-# Asignatura.py
 class Asignatura:
     contador_asignaturas = 0  # Atributo de clase para contar asignaturas
 
@@ -54,6 +52,4 @@ class Asignatura:
     def mostrar_informacion(self):
         print(f"Asignatura: {self._nombre}, Código: {self._codigo}, Créditos: {self._creditos}")
 
-
-# Creación de una instancia de prueba
 
