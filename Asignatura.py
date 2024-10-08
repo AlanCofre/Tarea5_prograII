@@ -10,46 +10,44 @@ class Asignatura:
         if creditos <= 0:
             raise ValueError("Los créditos deben ser un número positivo.")
         
-        self._nombre = nombre
-        self._codigo = codigo
-        self._creditos = creditos
+        self.__nombre = nombre
+        self.__codigo = codigo
+        self.__creditos = creditos
         Asignatura.contador_asignaturas += 1
 
     @property
     def nombre(self):
-        return self._nombre
+        return self.__nombre
 
     @nombre.setter
     def nombre(self, nombre):
         if not nombre:
             raise ValueError("El nombre de la asignatura no puede estar vacío.")
-        self._nombre = nombre
+        self.__nombre = nombre
 
     @property
     def codigo(self):
-        return self._codigo
+        return self.__codigo
 
     @codigo.setter
     def codigo(self, codigo):
         if not codigo:
             raise ValueError("El código de la asignatura no puede estar vacío.")
-        self._codigo = codigo
+        self.__codigo = codigo
 
     @property
     def creditos(self):
-        return self._creditos
+        return self.__creditos
 
     @creditos.setter
     def creditos(self, creditos):
         if creditos <= 0:
             raise ValueError("Los créditos deben ser un número positivo.")
-        self._creditos = creditos
+        self.__creditos = creditos
 
     @classmethod
     def cantidad_asignaturas(cls):
         return cls.contador_asignaturas
 
     def mostrar_informacion(self):
-        print(f"Asignatura: {self._nombre}, Código: {self._codigo}, Créditos: {self._creditos}")
-
-
+        print(f"Asignatura: {self.__nombre}, Código: {self.__codigo}, Créditos: {self.__creditos}")

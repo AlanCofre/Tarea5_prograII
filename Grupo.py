@@ -6,6 +6,8 @@ class Grupo:
     contador_grupos = 0  # Atributo de clase para contar grupos
 
     def __init__(self, numero_grupo: int, asignatura: Asignatura, profesor: Profesor):
+        if numero_grupo <= 0:
+            raise ValueError("El número de grupo debe ser un entero positivo.")
         self.__numero_grupo = numero_grupo  # Atributo privado
         self.__asignatura = asignatura  # Atributo privado (objeto Asignatura)
         self.__profesor = profesor  # Atributo privado (objeto Profesor)
@@ -19,6 +21,8 @@ class Grupo:
 
     @numero_grupo.setter
     def numero_grupo(self, numero_grupo):
+        if numero_grupo <= 0:
+            raise ValueError("El número de grupo debe ser un entero positivo.")
         self.__numero_grupo = numero_grupo
 
     # Propiedad para obtener la asignatura
@@ -34,7 +38,7 @@ class Grupo:
     # Propiedad para obtener la lista de estudiantes
     @property
     def estudiantes(self):
-        return self.__estudiantes
+        return list(self.__estudiantes)
 
     # Método de clase para obtener la cantidad total de grupos creados
     @classmethod
