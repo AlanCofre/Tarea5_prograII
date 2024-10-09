@@ -68,7 +68,7 @@ class App(ctk.CTk):
             try:
                 nombre = entry_nombre.get().strip()
                 codigo = entry_codigo.get().strip()
-                creditos = int(entry_creditos.get().strip)
+                creditos = int(entry_creditos.get())
                 
                 if not nombre or not codigo:
                     self.text_output.insert("end", "El nombre y el codigo no pueden estar vacios \n")
@@ -249,7 +249,7 @@ class App(ctk.CTk):
 
         def guardar_grupo():
             try:
-                numero_grupo = int(entry_numero.get().strip())
+                numero_grupo = int(entry_numero.get())
                 if numero_grupo <= 0:
                     self.text_output.insert("end", "El número de grupo debe ser un número positivo.\n")
                     return
@@ -297,17 +297,22 @@ class App(ctk.CTk):
 
     def mostrar_programa(self):
         if not self.grupos:
-            self.text_output.insert("end", "No se ha agregado ningún grupo al programa académico.\nPrimero debe agregar grupos.\n")
+            self.text_output.insert("end", "No se ha agregado ningún grupo al programa académico.\nPrimero debe agregar grupos.\n\n")
             return
         
+        # Limpia el contenido anterior del cuadro de texto
+        self.text_output.delete(1.0, "end")
         
-        self.text_output.insert("end", f"Programa Académico: {self.programa_academico.nombre} ({self.programa_academico.codigo})\n")
+        # Muestra la información del programa
+        self.text_output.insert("end", f"Programa Académico: {self.programa_academico.nombre} ({self.programa_academico.codigo})\n\n")
         
-    
+        # Muestra cada grupo con un separador
         for grupo in self.grupos:
             asignatura = grupo.asignatura.nombre
             profesor = f"{grupo.profesor.nombre} {grupo.profesor.apellido}"
             self.text_output.insert("end", f"Grupo {grupo.numero_grupo}: Asignatura: {asignatura}, Profesor: {profesor}\n")
+            self.text_output.insert("end", "-------------------------------------------\n\n")
+    
 
 if __name__ == "__main__":
     ctk.set_appearance_mode("dark")  # Modo oscuro de CustomTkinter
