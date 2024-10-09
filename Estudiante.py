@@ -13,7 +13,8 @@ class Estudiante(Persona):
             raise ValueError("La carrera no puede estar vacía.")
         if semestre <= 0:
             raise ValueError("El semestre debe ser un número positivo.")
-        # Llamamos al constructor de la clase base (Persona) para inicializar los atributos heredados
+        # Llamamos al constructor de la clase base
+        #  (Persona) para inicializar los atributos heredados
         super().__init__(nombre, apellido, fecha_nacimiento)
         self.__matricula = matricula
         self.__carrera = carrera

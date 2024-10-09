@@ -19,31 +19,46 @@ class App(ctk.CTk):
         self.grupos = []
         self.programa_academico = ProgramaAcademico("Sistemas en informática", "ISW001")
 
-        # Crear el marco de control principal
-        self.frame_principal = ctk.CTkFrame(self)
-        self.frame_principal.pack(padx=20, pady=20, fill="both", expand=True)
+        # Crear pestañas
+        self.tabs = ctk.CTkTabview(self)
+        self.tabs.pack(padx=20, pady=20, fill="both", expand=True)
 
-        self.label_titulo = ctk.CTkLabel(self.frame_principal, text="Sistema de Gestión Universitaria", font=("Arial", 20))
-        self.label_titulo.pack(pady=10)
+        self.tab_asignaturas = self.tabs.add("Asignaturas")
+        self.tab_profesores = self.tabs.add("Profesores")
+        self.tab_estudiantes = self.tabs.add("Estudiantes")
+        self.tab_grupos = self.tabs.add("Grupos")
+        self.tab_programa = self.tabs.add("Programa Académico")
 
-        # Botones principales
-        self.boton_crear_asignatura = ctk.CTkButton(self.frame_principal, text="Crear Asignatura", command=self.crear_asignatura)
-        self.boton_crear_asignatura.pack(pady=10)
+        # Asignaturas
+        self.crear_boton_asignaturas(self.tab_asignaturas)
 
-        self.boton_crear_profesor = ctk.CTkButton(self.frame_principal, text="Crear Profesor", command=self.crear_profesor)
-        self.boton_crear_profesor.pack(pady=10)
+        # Profesores
+        self.crear_boton_profesores(self.tab_profesores)
 
-        self.boton_crear_estudiante = ctk.CTkButton(self.frame_principal, text="Crear Estudiante", command=self.crear_estudiante)
-        self.boton_crear_estudiante.pack(pady=10)
+        # Estudiantes
+        self.crear_boton_estudiantes(self.tab_estudiantes)
 
-        self.boton_crear_grupo = ctk.CTkButton(self.frame_principal, text="Crear Grupo", command=self.crear_grupo)
-        self.boton_crear_grupo.pack(pady=10)
+        # Grupos
+        self.crear_boton_grupos(self.tab_grupos)
 
-        self.boton_mostrar_programa = ctk.CTkButton(self.frame_principal, text="Mostrar Programa Académico", command=self.mostrar_programa)
-        self.boton_mostrar_programa.pack(pady=10)
+        # Programa Académico
+        self.crear_boton_programa(self.tab_programa)
 
-        self.text_output = ctk.CTkTextbox(self.frame_principal, width=600, height=200)
+        # Cuadro de texto para la salida
+        self.text_output = ctk.CTkTextbox(self, width=600, height=200)
         self.text_output.pack(pady=10)
+
+    # -------------------------------------------------
+    # Asignaturas
+    def crear_boton_asignaturas(self, frame):
+        boton_crear_asignatura = ctk.CTkButton(frame, text="Crear Asignatura", command=self.crear_asignatura)
+        boton_crear_asignatura.pack(pady=10)
+
+        boton_eliminar_asignatura = ctk.CTkButton(frame, text="Eliminar Asignatura", command=self.eliminar_asignatura)
+        boton_eliminar_asignatura.pack(pady=10)
+
+        boton_mostrar_asignaturas = ctk.CTkButton(frame, text="Mostrar Asignaturas", command=self.mostrar_asignaturas)
+        boton_mostrar_asignaturas.pack(pady=10)
 
     def crear_asignatura(self):
         ventana_asignatura = ctk.CTkToplevel(self)
@@ -69,13 +84,14 @@ class App(ctk.CTk):
                 nombre = entry_nombre.get().strip()
                 codigo = entry_codigo.get().strip()
                 creditos = int(entry_creditos.get())
-                
+
                 if not nombre or not codigo:
-                    self.text_output.insert("end", "El nombre y el codigo no pueden estar vacios \n")
+                    self.text_output.insert("end", "El nombre y el código no pueden estar vacíos.\n")
                     return
                 if creditos <= 0:
-                    self.text_output.insert("end", "Los créditos deben ser un numero positivo \n")
+                    self.text_output.insert("end", "Los créditos deben ser un número positivo.\n")
                     return
+
                 # Verificar si la asignatura ya existe
                 for asignatura in self.asignaturas:
                     if asignatura.nombre == nombre and asignatura.codigo == codigo:
@@ -89,9 +105,54 @@ class App(ctk.CTk):
 
             except ValueError:
                 self.text_output.insert("end", "Por favor, ingrese un valor válido para los créditos.\n")
-                
+
         boton_guardar = ctk.CTkButton(ventana_asignatura, text="Guardar Asignatura", command=guardar_asignatura)
         boton_guardar.pack(pady=10)
+
+    def eliminar_asignatura(self):
+        ventana_eliminar_asignatura = ctk.CTkToplevel(self)
+        ventana_eliminar_asignatura.title("Eliminar Asignatura")
+
+        label_codigo = ctk.CTkLabel(ventana_eliminar_asignatura, text="Código de la Asignatura:")
+        label_codigo.pack(pady=5)
+        entry_codigo = ctk.CTkEntry(ventana_eliminar_asignatura)
+        entry_codigo.pack(pady=5)
+
+        def eliminar():
+            codigo = entry_codigo.get().strip()
+            asignatura_encontrada = None
+            for asignatura in self.asignaturas:
+                if asignatura.codigo == codigo:
+                    asignatura_encontrada = asignatura
+                    break
+            if asignatura_encontrada:
+                self.asignaturas.remove(asignatura_encontrada)
+                self.text_output.insert("end", f"Asignatura con código '{codigo}' eliminada.\n")
+            else:
+                self.text_output.insert("end", f"No se encontró una asignatura con el código '{codigo}'.\n")
+            ventana_eliminar_asignatura.destroy()
+
+        boton_eliminar = ctk.CTkButton(ventana_eliminar_asignatura, text="Eliminar", command=eliminar)
+        boton_eliminar.pack(pady=10)
+
+    def mostrar_asignaturas(self):
+        self.text_output.delete(1.0, "end")
+        if not self.asignaturas:
+            self.text_output.insert("end", "No hay asignaturas creadas.\n")
+        for asignatura in self.asignaturas:
+            self.text_output.insert("end", f"Asignatura: {asignatura.nombre} | Código: {asignatura.codigo} | Créditos: {asignatura.creditos}\n")
+
+    # -------------------------------------------------
+    # Profesores
+    def crear_boton_profesores(self, frame):
+        boton_crear_profesor = ctk.CTkButton(frame, text="Crear Profesor", command=self.crear_profesor)
+        boton_crear_profesor.pack(pady=10)
+
+        boton_eliminar_profesor = ctk.CTkButton(frame, text="Eliminar Profesor", command=self.eliminar_profesor)
+        boton_eliminar_profesor.pack(pady=10)
+
+        boton_mostrar_profesores = ctk.CTkButton(frame, text="Mostrar Profesores", command=self.mostrar_profesores)
+        boton_mostrar_profesores.pack(pady=10)
 
     def crear_profesor(self):
         ventana_profesor = ctk.CTkToplevel(self)
@@ -129,27 +190,72 @@ class App(ctk.CTk):
                 fecha = entry_fecha.get().strip()
                 numero = entry_numero.get().strip()
                 departamento = entry_departamento.get().strip()
-        
+
                 if not nombre or not apellido or not fecha or not numero or not departamento:
                     self.text_output.insert("end", "Todos los campos deben estar completos.\n")
                     return
-        
+
                 # Verificar si el profesor ya existe
                 for profesor in self.profesores:
                     if profesor.numero_empleado == numero:
                         self.text_output.insert("end", f"El profesor con número de empleado '{numero}' ya existe.\n")
                         return
-        
+
                 profesor = Profesor(nombre, apellido, fecha, numero, departamento)
                 self.profesores.append(profesor)
                 self.text_output.insert("end", f"Profesor '{nombre} {apellido}' creado con éxito.\n")
                 ventana_profesor.destroy()
-        
+
             except ValueError:
                 self.text_output.insert("end", "Error al crear el profesor. Verifique los datos ingresados.\n")
 
         boton_guardar = ctk.CTkButton(ventana_profesor, text="Guardar Profesor", command=guardar_profesor)
         boton_guardar.pack(pady=10)
+
+    def eliminar_profesor(self):
+        ventana_eliminar_profesor = ctk.CTkToplevel(self)
+        ventana_eliminar_profesor.title("Eliminar Profesor")
+
+        label_numero = ctk.CTkLabel(ventana_eliminar_profesor, text="Número de Empleado:")
+        label_numero.pack(pady=5)
+        entry_numero = ctk.CTkEntry(ventana_eliminar_profesor)
+        entry_numero.pack(pady=5)
+
+        def eliminar():
+            numero = entry_numero.get().strip()
+            profesor_encontrado = None
+            for profesor in self.profesores:
+                if profesor.numero_empleado == numero:
+                    profesor_encontrado = profesor
+                    break
+            if profesor_encontrado:
+                self.profesores.remove(profesor_encontrado)
+                self.text_output.insert("end", f"Profesor con número '{numero}' eliminado.\n")
+            else:
+                self.text_output.insert("end", f"No se encontró un profesor con el número '{numero}'.\n")
+            ventana_eliminar_profesor.destroy()
+
+        boton_eliminar = ctk.CTkButton(ventana_eliminar_profesor, text="Eliminar", command=eliminar)
+        boton_eliminar.pack(pady=10)
+
+    def mostrar_profesores(self):
+        self.text_output.delete(1.0, "end")
+        if not self.profesores:
+            self.text_output.insert("end", "No hay profesores creados.\n")
+        for profesor in self.profesores:
+            self.text_output.insert("end", f"Profesor: {profesor.nombre} {profesor.apellido} | Departamento: {profesor.departamento} | Número de Empleado: {profesor.numero_empleado}\n")
+
+    # -------------------------------------------------
+    # Estudiantes
+    def crear_boton_estudiantes(self, frame):
+        boton_crear_estudiante = ctk.CTkButton(frame, text="Crear Estudiante", command=self.crear_estudiante)
+        boton_crear_estudiante.pack(pady=10)
+
+        boton_eliminar_estudiante = ctk.CTkButton(frame, text="Eliminar Estudiante", command=self.eliminar_estudiante)
+        boton_eliminar_estudiante.pack(pady=10)
+
+        boton_mostrar_estudiantes = ctk.CTkButton(frame, text="Mostrar Estudiantes", command=self.mostrar_estudiantes)
+        boton_mostrar_estudiantes.pack(pady=10)
 
     def crear_estudiante(self):
         ventana_estudiante = ctk.CTkToplevel(self)
@@ -218,6 +324,51 @@ class App(ctk.CTk):
         boton_guardar = ctk.CTkButton(ventana_estudiante, text="Guardar Estudiante", command=guardar_estudiante)
         boton_guardar.pack(pady=10)
 
+    def eliminar_estudiante(self):
+        ventana_eliminar_estudiante = ctk.CTkToplevel(self)
+        ventana_eliminar_estudiante.title("Eliminar Estudiante")
+
+        label_matricula = ctk.CTkLabel(ventana_eliminar_estudiante, text="Matrícula del Estudiante:")
+        label_matricula.pack(pady=5)
+        entry_matricula = ctk.CTkEntry(ventana_eliminar_estudiante)
+        entry_matricula.pack(pady=5)
+
+        def eliminar():
+            matricula = entry_matricula.get().strip()
+            estudiante_encontrado = None
+            for estudiante in self.estudiantes:
+                if estudiante.matricula == matricula:
+                    estudiante_encontrado = estudiante
+                    break
+            if estudiante_encontrado:
+                self.estudiantes.remove(estudiante_encontrado)
+                self.text_output.insert("end", f"Estudiante con matrícula '{matricula}' eliminado.\n")
+            else:
+                self.text_output.insert("end", f"No se encontró un estudiante con matrícula '{matricula}'.\n")
+            ventana_eliminar_estudiante.destroy()
+
+        boton_eliminar = ctk.CTkButton(ventana_eliminar_estudiante, text="Eliminar", command=eliminar)
+        boton_eliminar.pack(pady=10)
+
+    def mostrar_estudiantes(self):
+        self.text_output.delete(1.0, "end")
+        if not self.estudiantes:
+            self.text_output.insert("end", "No hay estudiantes creados.\n")
+        for estudiante in self.estudiantes:
+            self.text_output.insert("end", f"Estudiante: {estudiante.nombre} {estudiante.apellido} | Matrícula: {estudiante.matricula} | Carrera: {estudiante.carrera}\n")
+
+    # -------------------------------------------------
+    # Grupos
+    def crear_boton_grupos(self, frame):
+        boton_crear_grupo = ctk.CTkButton(frame, text="Crear Grupo", command=self.crear_grupo)
+        boton_crear_grupo.pack(pady=10)
+
+        boton_eliminar_grupo = ctk.CTkButton(frame, text="Eliminar Grupo", command=self.eliminar_grupo)
+        boton_eliminar_grupo.pack(pady=10)
+
+        boton_mostrar_grupos = ctk.CTkButton(frame, text="Mostrar Grupos", command=self.mostrar_grupos)
+        boton_mostrar_grupos.pack(pady=10)
+
     def crear_grupo(self):
         ventana_grupo = ctk.CTkToplevel(self)
         ventana_grupo.title("Crear Grupo")
@@ -235,13 +386,12 @@ class App(ctk.CTk):
         label_numero.pack(pady=5)
         entry_numero = ctk.CTkEntry(ventana_grupo)
         entry_numero.pack(pady=5)
-        
+
         label_asignatura = ctk.CTkLabel(ventana_grupo, text="Seleccione Asignatura:")
         label_asignatura.pack(pady=5)
         entry_asignatura = ctk.CTkOptionMenu(ventana_grupo, values=[a.nombre for a in self.asignaturas])
         entry_asignatura.pack(pady=5)
 
-        # Selección de Profesor
         label_profesor = ctk.CTkLabel(ventana_grupo, text="Seleccione Profesor:")
         label_profesor.pack(pady=5)
         entry_profesor = ctk.CTkOptionMenu(ventana_grupo, values=[f"{p.nombre} {p.apellido}" for p in self.profesores])
@@ -249,7 +399,7 @@ class App(ctk.CTk):
 
         def guardar_grupo():
             try:
-                numero_grupo = int(entry_numero.get())
+                numero_grupo = int(entry_numero.get().strip())
                 if numero_grupo <= 0:
                     self.text_output.insert("end", "El número de grupo debe ser un número positivo.\n")
                     return
@@ -267,7 +417,7 @@ class App(ctk.CTk):
                     if asignatura.nombre == nombre_asignatura:
                         asignatura_seleccionada = asignatura
                         break
-                    
+
                 if asignatura_seleccionada is None:
                     self.text_output.insert("end", "La asignatura seleccionada no existe.\n")
                     return
@@ -279,11 +429,12 @@ class App(ctk.CTk):
                     if f"{profesor.nombre} {profesor.apellido}" == nombre_profesor:
                         profesor_seleccionado = profesor
                         break
-                    
+
                 if profesor_seleccionado is None:
                     self.text_output.insert("end", "El profesor seleccionado no existe.\n")
                     return
 
+                # Crear el grupo
                 grupo = Grupo(numero_grupo, asignatura_seleccionada, profesor_seleccionado)
                 self.grupos.append(grupo)
                 self.text_output.insert("end", f"Grupo {numero_grupo} creado con éxito.\n")
@@ -295,24 +446,55 @@ class App(ctk.CTk):
         boton_guardar = ctk.CTkButton(ventana_grupo, text="Guardar Grupo", command=guardar_grupo)
         boton_guardar.pack(pady=10)
 
-    def mostrar_programa(self):
-        if not self.grupos:
-            self.text_output.insert("end", "No se ha agregado ningún grupo al programa académico.\nPrimero debe agregar grupos.\n\n")
-            return
-        
-        # Limpia el contenido anterior del cuadro de texto
+    def eliminar_grupo(self):
+        ventana_eliminar_grupo = ctk.CTkToplevel(self)
+        ventana_eliminar_grupo.title("Eliminar Grupo")
+
+        label_numero_grupo = ctk.CTkLabel(ventana_eliminar_grupo, text="Número del Grupo:")
+        label_numero_grupo.pack(pady=5)
+        entry_numero_grupo = ctk.CTkEntry(ventana_eliminar_grupo)
+        entry_numero_grupo.pack(pady=5)
+
+        def eliminar():
+            try:
+                numero_grupo = int(entry_numero_grupo.get().strip())
+                grupo_encontrado = None
+                for grupo in self.grupos:
+                    if grupo.numero_grupo == numero_grupo:
+                        grupo_encontrado = grupo
+                        break
+                if grupo_encontrado:
+                    self.grupos.remove(grupo_encontrado)
+                    self.text_output.insert("end", f"Grupo {numero_grupo} eliminado con éxito.\n")
+                else:
+                    self.text_output.insert("end", f"No se encontró un grupo con el número {numero_grupo}.\n")
+                ventana_eliminar_grupo.destroy()
+            except ValueError:
+                self.text_output.insert("end", "Por favor, ingrese un número válido para el grupo.\n")
+
+        boton_eliminar = ctk.CTkButton(ventana_eliminar_grupo, text="Eliminar", command=eliminar)
+        boton_eliminar.pack(pady=10)
+
+    def mostrar_grupos(self):
         self.text_output.delete(1.0, "end")
-        
-        # Muestra la información del programa
-        self.text_output.insert("end", f"Programa Académico: {self.programa_academico.nombre} ({self.programa_academico.codigo})\n\n")
-        
-        # Muestra cada grupo con un separador
+        if not self.grupos:
+            self.text_output.insert("end", "No hay grupos creados.\n")
         for grupo in self.grupos:
-            asignatura = grupo.asignatura.nombre
-            profesor = f"{grupo.profesor.nombre} {grupo.profesor.apellido}"
-            self.text_output.insert("end", f"Grupo {grupo.numero_grupo}: Asignatura: {asignatura}, Profesor: {profesor}\n")
-            self.text_output.insert("end", "-------------------------------------------\n\n")
-    
+            self.text_output.insert("end", f"Grupo {grupo.numero_grupo}: Asignatura: {grupo.asignatura.nombre}, Profesor: {grupo.profesor.nombre} {grupo.profesor.apellido}\n")
+
+    # -------------------------------------------------
+    # Programa Académico
+    def crear_boton_programa(self, frame):
+        boton_mostrar_programa = ctk.CTkButton(frame, text="Mostrar Programa Académico", command=self.mostrar_programa)
+        boton_mostrar_programa.pack(pady=10)
+
+    def mostrar_programa(self):
+        self.text_output.delete(1.0, "end")
+        if not self.grupos:
+            self.text_output.insert("end", "No hay grupos en el programa académico.\n")
+            return
+        self.text_output.insert("end", f"Programa Académico: {self.programa_academico.nombre} ({self.programa_academico.codigo})\n")
+        self.mostrar_grupos()
 
 if __name__ == "__main__":
     ctk.set_appearance_mode("dark")  # Modo oscuro de CustomTkinter
