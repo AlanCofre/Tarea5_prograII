@@ -10,7 +10,7 @@ class App(ctk.CTk):
         super().__init__()
 
         self.title("Sistema de Gestión Universitaria")
-        self.geometry("800x600")
+        self.geometry("500x400")
 
         # Lista de objetos
         self.asignaturas = []
@@ -21,7 +21,7 @@ class App(ctk.CTk):
 
         # Crear pestañas
         self.tabs = ctk.CTkTabview(self)
-        self.tabs.pack(padx=20, pady=20, fill="both", expand=True)
+        self.tabs.pack(padx=20, pady=10, fill="both", expand=True)
 
         self.tab_asignaturas = self.tabs.add("Asignaturas")
         self.tab_profesores = self.tabs.add("Profesores")
@@ -45,7 +45,7 @@ class App(ctk.CTk):
         self.crear_boton_programa(self.tab_programa)
 
         # Cuadro de texto para la salida
-        self.text_output = ctk.CTkTextbox(self, width=600, height=200)
+        self.text_output = ctk.CTkTextbox(self, width=450, height=300)
         self.text_output.pack(pady=10)
 
     # -------------------------------------------------
