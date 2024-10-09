@@ -65,14 +65,31 @@ class App(ctk.CTk):
         entry_creditos.pack(pady=5)
 
         def guardar_asignatura():
-            nombre = entry_nombre.get()
-            codigo = entry_codigo.get()
-            creditos = int(entry_creditos.get())
-            asignatura = Asignatura(nombre, codigo, creditos)
-            self.asignaturas.append(asignatura)
-            self.text_output.insert("end", f"Asignatura '{nombre}' creada con éxito.\n")
-            ventana_asignatura.destroy()
+            try:
+                nombre = entry_nombre.get().strip()
+                codigo = entry_codigo.get().strip()
+                creditos = int(entry_creditos.get().strip)
+                
+                if not nombre or not codigo:
+                    self.text_output.insert("end", "El nombre y el codigo no pueden estar vacios \n")
+                    return
+                if creditos <= 0:
+                    self.text_output.insert("end", "Los créditos deben ser un numero positivo \n")
+                    return
+                # Verificar si la asignatura ya existe
+                for asignatura in self.asignaturas:
+                    if asignatura.nombre == nombre and asignatura.codigo == codigo:
+                        self.text_output.insert("end", f"La asignatura '{nombre}' ya existe.\n")
+                        return
 
+                asignatura = Asignatura(nombre, codigo, creditos)
+                self.asignaturas.append(asignatura)
+                self.text_output.insert("end", f"Asignatura '{nombre}' creada con éxito.\n")
+                ventana_asignatura.destroy()
+
+            except ValueError:
+                self.text_output.insert("end", "Por favor, ingrese un valor válido para los créditos.\n")
+                
         boton_guardar = ctk.CTkButton(ventana_asignatura, text="Guardar Asignatura", command=guardar_asignatura)
         boton_guardar.pack(pady=10)
 
@@ -106,15 +123,30 @@ class App(ctk.CTk):
         entry_departamento.pack(pady=5)
 
         def guardar_profesor():
-            nombre = entry_nombre.get()
-            apellido = entry_apellido.get()
-            fecha = entry_fecha.get()
-            numero = entry_numero.get()
-            departamento = entry_departamento.get()
-            profesor = Profesor(nombre, apellido, fecha, numero, departamento)
-            self.profesores.append(profesor)
-            self.text_output.insert("end", f"Profesor '{nombre} {apellido}' creado con éxito.\n")
-            ventana_profesor.destroy()
+            try:
+                nombre = entry_nombre.get().strip()
+                apellido = entry_apellido.get().strip()
+                fecha = entry_fecha.get().strip()
+                numero = entry_numero.get().strip()
+                departamento = entry_departamento.get().strip()
+        
+                if not nombre or not apellido or not fecha or not numero or not departamento:
+                    self.text_output.insert("end", "Todos los campos deben estar completos.\n")
+                    return
+        
+                # Verificar si el profesor ya existe
+                for profesor in self.profesores:
+                    if profesor.numero_empleado == numero:
+                        self.text_output.insert("end", f"El profesor con número de empleado '{numero}' ya existe.\n")
+                        return
+        
+                profesor = Profesor(nombre, apellido, fecha, numero, departamento)
+                self.profesores.append(profesor)
+                self.text_output.insert("end", f"Profesor '{nombre} {apellido}' creado con éxito.\n")
+                ventana_profesor.destroy()
+        
+            except ValueError:
+                self.text_output.insert("end", "Error al crear el profesor. Verifique los datos ingresados.\n")
 
         boton_guardar = ctk.CTkButton(ventana_profesor, text="Guardar Profesor", command=guardar_profesor)
         boton_guardar.pack(pady=10)
@@ -154,16 +186,34 @@ class App(ctk.CTk):
         entry_semestre.pack(pady=5)
 
         def guardar_estudiante():
-            nombre = entry_nombre.get()
-            apellido = entry_apellido.get()
-            fecha = entry_fecha.get()
-            matricula = entry_matricula.get()
-            carrera = entry_carrera.get()
-            semestre = int(entry_semestre.get())
-            estudiante = Estudiante(nombre, apellido, fecha, matricula, carrera, semestre)
-            self.estudiantes.append(estudiante)
-            self.text_output.insert("end", f"Estudiante '{nombre} {apellido}' creado con éxito.\n")
-            ventana_estudiante.destroy()
+            try:
+                nombre = entry_nombre.get().strip()
+                apellido = entry_apellido.get().strip()
+                fecha = entry_fecha.get().strip()
+                matricula = entry_matricula.get().strip()
+                carrera = entry_carrera.get().strip()
+                semestre = int(entry_semestre.get().strip())
+
+                if not nombre or not apellido or not fecha or not matricula or not carrera:
+                    self.text_output.insert("end", "Todos los campos deben estar completos.\n")
+                    return
+                if semestre <= 0:
+                    self.text_output.insert("end", "El semestre debe ser un número positivo.\n")
+                    return
+
+                # Verificar si el estudiante ya existe
+                for estudiante in self.estudiantes:
+                    if estudiante.matricula == matricula:
+                        self.text_output.insert("end", f"El estudiante con matrícula '{matricula}' ya existe.\n")
+                        return
+
+                estudiante = Estudiante(nombre, apellido, fecha, matricula, carrera, semestre)
+                self.estudiantes.append(estudiante)
+                self.text_output.insert("end", f"Estudiante '{nombre} {apellido}' creado con éxito.\n")
+                ventana_estudiante.destroy()
+
+            except ValueError:
+                self.text_output.insert("end", "Error en los datos. Verifique que el semestre sea un número válido.\n")
 
         boton_guardar = ctk.CTkButton(ventana_estudiante, text="Guardar Estudiante", command=guardar_estudiante)
         boton_guardar.pack(pady=10)
@@ -198,39 +248,49 @@ class App(ctk.CTk):
         entry_profesor.pack(pady=5)
 
         def guardar_grupo():
-            numero_grupo = int(entry_numero.get())
-        
-            # Obtener la asignatura seleccionada
-            nombre_asignatura = entry_asignatura.get()
-            asignatura_seleccionada = None
-            
-            for asignatura in self.asignaturas:
-                if asignatura.nombre == nombre_asignatura:
-                    asignatura_seleccionada = asignatura
-                    break
-            
-            if asignatura_seleccionada is None:
-                self.text_output.insert("end", "La asignatura seleccionada no existe.\n")
-                return
+            try:
+                numero_grupo = int(entry_numero.get().strip())
+                if numero_grupo <= 0:
+                    self.text_output.insert("end", "El número de grupo debe ser un número positivo.\n")
+                    return
 
-            # Obtener el profesor seleccionado
-            nombre_profesor = entry_profesor.get()
-            profesor_seleccionado = None
-            
-            for profesor in self.profesores:
-                if f"{profesor.nombre} {profesor.apellido}" == nombre_profesor:
-                    profesor_seleccionado = profesor
-                    break
-            
-            if profesor_seleccionado is None:
-                self.text_output.insert("end", "El profesor seleccionado no existe.\n")
-                return
-        
-            grupo = Grupo(numero_grupo, asignatura_seleccionada, profesor_seleccionado)
-            self.grupos.append(grupo)
-            self.text_output.insert("end", f"Grupo {numero_grupo} creado con éxito.\n")
-            ventana_grupo.destroy()
-            
+                # Verificar si ya existe un grupo con ese número
+                for grupo in self.grupos:
+                    if grupo.numero_grupo == numero_grupo:
+                        self.text_output.insert("end", f"El grupo con número {numero_grupo} ya existe.\n")
+                        return
+
+                # Obtener la asignatura seleccionada
+                nombre_asignatura = entry_asignatura.get()
+                asignatura_seleccionada = None
+                for asignatura in self.asignaturas:
+                    if asignatura.nombre == nombre_asignatura:
+                        asignatura_seleccionada = asignatura
+                        break
+                    
+                if asignatura_seleccionada is None:
+                    self.text_output.insert("end", "La asignatura seleccionada no existe.\n")
+                    return
+
+                # Obtener el profesor seleccionado
+                nombre_profesor = entry_profesor.get()
+                profesor_seleccionado = None
+                for profesor in self.profesores:
+                    if f"{profesor.nombre} {profesor.apellido}" == nombre_profesor:
+                        profesor_seleccionado = profesor
+                        break
+                    
+                if profesor_seleccionado is None:
+                    self.text_output.insert("end", "El profesor seleccionado no existe.\n")
+                    return
+
+                grupo = Grupo(numero_grupo, asignatura_seleccionada, profesor_seleccionado)
+                self.grupos.append(grupo)
+                self.text_output.insert("end", f"Grupo {numero_grupo} creado con éxito.\n")
+                ventana_grupo.destroy()
+
+            except ValueError:
+                self.text_output.insert("end", "El número de grupo debe ser un número entero válido.\n")
 
         boton_guardar = ctk.CTkButton(ventana_grupo, text="Guardar Grupo", command=guardar_grupo)
         boton_guardar.pack(pady=10)

@@ -97,8 +97,3 @@ class Estudiante(Persona):
         super().Presentarse()
         print(f"Además, soy estudiante de {self.__carrera}, en el semestre {self.__semestre}, y mi matrícula es {self.__matricula}.")
 
-# Crear una instancia de la clase Estudiante y llamamos al método Presentarse
-
-
-
-
